@@ -1,7 +1,8 @@
 #include "Game.hpp"
+#include "TextureManager.hpp"
+#include "GameObject.hpp"
 
-SDL_Texture* player_texture = NULL;
-SDL_Rect srcRect, destRect;
+GameObject* Player;
 
 Game::Game()
 {
@@ -46,9 +47,7 @@ void Game::init(const char * title, int xpos, int ypos, int width, int height, b
 			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		}
 
-		SDL_Surface*  tempSurface = IMG_Load("assets/seli.png");
-		player_texture = SDL_CreateTextureFromSurface(renderer, tempSurface);
-		SDL_FreeSurface(tempSurface);
+		Player = new GameObject("assets/seli.png", renderer,15,15);
 	}
 }
 
@@ -68,18 +67,17 @@ void Game::handleEvents()
 
 void Game::update()
 {
-	destRect.w = 250;
-	destRect.h = 250;
-	destRect.x = cnt;
+	Player->update();
 	cnt++;
+	printf(std::to_string(cnt).c_str());
+	printf("\n");
 }
 
 void Game::render()
 {
 	SDL_RenderClear(renderer);
 	//render choices
-	SDL_RenderCopy(renderer,player_texture,NULL,&destRect);
-
+	Player->render();
 	SDL_RenderPresent(renderer);
 }
 
